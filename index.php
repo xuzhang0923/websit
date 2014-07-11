@@ -58,7 +58,6 @@
 					default :
 						break;
 				}
-
 				unset($_GET['action']);
 			}
 			?>
@@ -106,7 +105,7 @@
 															$outputString .="<li> details  : " . $fetchedArray['details'] . "</li>";
 													$outputString .="</ul>";
 													
-													$outputString .= "<form method=\"post\" action=\"?action=add\">" . 
+													$outputString .= "<form method=\"post\" action=\"?action=add&tab=1\">" . 
 															"<input type=\"hidden\" name=\"day\" value=\"" . $fetchedArray['day'] . "\"/>" .
 															"<input type=\"hidden\" name=\"fromto\" value=\"" . $fetchedArray['fromto'] . "\"/>" .
 			                           						 "<div class=\"form_row\">" .
@@ -151,7 +150,7 @@
 															$outputString .="<li> details  : " . $fetchedArray['details'] . "</li>";
 													$outputString .="</ul>";
 													
-										$outputString .= "<form method=\"post\" action=\"?action=add\">" . 
+										$outputString .= "<form method=\"post\" action=\"?action=add&tab=2\">" . 
 															"<input type=\"hidden\" name=\"day\" value=\"" . $fetchedArray['day'] . "\"/>" .
 															"<input type=\"hidden\" name=\"fromto\" value=\"" . $fetchedArray['fromto'] . "\"/>" .
 			                           						 "<div class=\"form_row\">" .
@@ -302,7 +301,14 @@
 	<script type="text/javascript">
 		var tabber1 = new Yetii({
 			id : 'demo',
-			active : '2'
+			active : '<?php if(isset($_GET['tab']))
+							{
+								echo $_GET['tab'];
+							}else{	
+								echo 1;
+							}
+							unset($_GET['tab']);
+					?>'
 		});
 
 	</script>
