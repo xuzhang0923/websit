@@ -143,7 +143,7 @@
 		{
 			$mSubscriber = mysql_real_escape_string($subscriber);
 			
-			$retriveSql = "SELECT publisher,day,fromto FROM subscribedInformation WHERE subscriber='" . $mSubscriber . "'";
+			$retriveSql = "SELECT id,publisher,day,fromto FROM subscribedInformation WHERE subscriber='" . $mSubscriber . "'";
 			$retrieveResult = mysql_query($retriveSql) or trigger_error("Query Failed:" . mysql_error());
 			
 			return $retrieveResult;
@@ -195,6 +195,20 @@
 			 $insterSubscribedResult = mysql_query($subscribedString) or trigger_error("Insert Failed:" . mysql_error());
 			 
 			 return true;
+		}
+
+		function cancelSubscriber($id)
+		{
+			$mId = mysql_real_escape_string($id);
+			
+			$deleteString = "DELETE FROM `subscribedInformation` WHERE id=\"" . $mId . "\"";
+			
+			if(!mysql_query($deleteString))
+			{
+				$_SESSION['error'] = mysql_error();
+			}
+			
+			return true;
 		}
         
         function __destruct(){

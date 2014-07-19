@@ -27,38 +27,35 @@
 			<?php
 			if (isset($_GET['action'])) {
 				switch ($_GET['action']) {
-					case 'publishInformation' :
-						if (isset($_SESSION['phone']) && isset($_POST['day']) && isset($_POST['time']) && isset($_POST['fromto']) && isset($_POST['seatnumber']) && $_POST['seatnumber'] != 0) {
-							if ($dbClient -> publishInformation($_SESSION['phone'], $_POST['day'], $_POST['time'], $_POST['fromto'], $_POST['seatnumber'], $_POST['details'])) {
-								echo "successfully pushlished the information";
-							} else {
-								echo $_SESSION['error'];
-							}
-						} else {
-							echo "paramters is not enough";
-						}
-
-						break;
-
-					case'add' :
+					case 'cancelSubscribe' :
+						
+						if($dbClient->loggedIn())
 						{
-							if (isset($_POST['day']) && isset($_POST['fromto'] )&& isset($_POST['phone']) && isset($_SESSION['phone']) ) {
-								if ($dbClient->subscribeCar($_SESSION['phone'], $_POST['phone'], $_POST['day'], $_POST['fromto'])) {
-									echo "successfully subscribe the car";
-								} else {
-									echo $_SESSION['error'];
+							if(isset($_GET['id']))
+							{
+								if(!$dbClient->cancelSubscriber($_GET['id']))
+								{
+									$_SESSION['message'] = $_SESSION['error'];
+								}else{
+									$_SESSION['message'] = "You have successfully unsubscribe from this car";
 								}
-							} else {
-								echo "paramters is not enough";
 							}
-
+							
+						}else
+						{
+							$_SESSION['message'] = "You are login yet. Please log in and then perform the action";								
 						}
+						
+						unset($_GET['id']);
+
 						break;
 
 					default :
+						$_SESSION['message'] = "Invalid Request";
 						break;
 				}
-				unset($_GET['action']);
+			}else{
+				$_SESSION['message'] = "Invalid Request";
 			}
 			?>
 
@@ -70,114 +67,40 @@
 						<span class="title_icon"><img src="images/bullet1.gif" alt="" title="" /></span>Traivel  Inforation
 					</div>
 
-					<div id="demo" class="demolayout">
-
-						<ul id="demo-nav" class="demolayout">
-							<li>
-								<a class="active" href="#tab1">Beijing => Yixian</a>
-							</li>
-							<li>
-								<a class="" href="#tab2">Yixian => Beijing</a>
-							</li>
-						</ul>
-						<div class="tabs-container">
-							<div style="display: block;" class="tab" id="tab1">
-								<div class="feat_prod_box"></div>
-								<?php
-									$publishedInformaiton = $dbClient->retrieverInformation(date("Y-m-d"), 1);
-									
-									$fetchedArray = mysql_fetch_array($publishedInformaiton);
-									while($fetchedArray)
-									{
-										$outputString = "<div class=\"feat_prod_box\">
-															<div class=\"prod_det_box\">
-																<div class=\"box_top\"></div>
-																<div class=\"box_center\">
-																	<div class=\"prod_title\">";
-																		$outputString .= $fetchedArray['phone'];
-													$outputString .="</div>";
-										
-													$outputString .= "<ul class=\"list\">";			
-															$outputString .="<li> day      : " . $fetchedArray['day'] . "</li>";
-															$outputString .="<li> time     : " . $fetchedArray['time'] . "</li>";
-															$outputString .="<li> fromto   : " . $fetchedArray['fromto'] . "</li>";
-															$outputString .="<li> totalseat: " . $fetchedArray['totalseat'] . "</li>";
-															$outputString .="<li> details  : " . $fetchedArray['details'] . "</li>";
-													$outputString .="</ul>";
-													
-													$outputString .= "<form method=\"post\" action=\"?action=add&tab=1\">" . 
-															"<input type=\"hidden\" name=\"phone\" value=\"" . $fetchedArray['phone'] . "\"/>" .
-															"<input type=\"hidden\" name=\"day\" value=\"" . $fetchedArray['day'] . "\"/>" .
-															"<input type=\"hidden\" name=\"fromto\" value=\"" . $fetchedArray['fromto'] . "\"/>" .
-			                           						 "<div class=\"form_row\">" .
-			                           						 	"<input type=\"submit\" class=\"register\" />".
-			                            						 "</div>".
-		                            						"</form>";
-													$outputString .="<div class=\"clear\"></div>
-																</div>
-																<div class=\"box_bottom\"></div>
-															</div>
-															<div class=\"clear\"></div>
-														</div>";
-														
-										echo $outputString;
-										
-										$fetchedArray = mysql_fetch_array($publishedInformaiton);
-									}
-								?>
+					<div class="prod_det_box">
+						<div class="box_top"></div>
+						<div class="box_center">
+							<div class="prod_title">
+								Cancel Result
 							</div>
-
-							<div style="display: none;" class="tab" id="tab2">
-								<div class="feat_prod_box"></div>
-								<?php
-									$publishedInformaiton = $dbClient->retrieverInformation(date("Y-m-d"), 2);
-									
-									$fetchedArray = mysql_fetch_array($publishedInformaiton);
-									while($fetchedArray)
-									{
-										$outputString = "<div class=\"feat_prod_box\">
-															<div class=\"prod_det_box\">
-																<div class=\"box_top\"></div>
-																<div class=\"box_center\">
-																	<div class=\"prod_title\">";
-																		$outputString .= $fetchedArray['phone'];
-													$outputString .="</div>";
-										
-													$outputString .= "<ul class=\"list\">";			
-															$outputString .="<li> day      : " . $fetchedArray['day'] . "</li>";
-															$outputString .="<li> time     : " . $fetchedArray['time'] . "</li>";
-															$outputString .="<li> fromto   : " . $fetchedArray['fromto'] . "</li>";
-															$outputString .="<li> totalseat: " . $fetchedArray['totalseat'] . "</li>";
-															$outputString .="<li> details  : " . $fetchedArray['details'] . "</li>";
-													$outputString .="</ul>";
-													
-										$outputString .= "<form method=\"post\" action=\"?action=add&tab=2\">" . 
-															"<input type=\"hidden\" name=\"phone\" value=\"" . $fetchedArray['phone'] . "\"/>" .
-															"<input type=\"hidden\" name=\"day\" value=\"" . $fetchedArray['day'] . "\"/>" .
-															"<input type=\"hidden\" name=\"fromto\" value=\"" . $fetchedArray['fromto'] . "\"/>" .
-			                           						 "<div class=\"form_row\">" .
-			                           						 	"<input type=\"submit\" class=\"register\" />".
-			                            						 "</div>".
-		                            						"</form>";
-													
-													$outputString .="<div class=\"clear\"></div>
-																</div>
-																<div class=\"box_bottom\"></div>
-															</div>
-															<div class=\"clear\"></div>
-														</div>";
-														
-										echo $outputString;
-										
-										$fetchedArray = mysql_fetch_array($publishedInformaiton);
-									}
-								?>
-							</div>
-
+							<p class="details">
+								<?php echo $_SESSION['message']; ?>
+							</p>
+							<p class="details">
+                             	  <span id="autojump">this page will jump to main page after 5 seconds</span>
+                             </p>	           
+                                     	
+                             <script language="javascript"> 
+                             		var t = 3;
+                             		var time = document.getElementById("autojump");
+                             		function fun(){
+                             	 		t--;
+                             	 		time.innerHTML="this page will jump to main page after "+t+" seconds";
+                             	 		if(t<=0){
+                             	  			location.href = "index.php";
+                             	  			clearInterval(inter);
+                             	 		}
+                             		}
+                             		var inter = setInterval("fun()",1000);
+                             </script>
+							<div class="clear"></div>
 						</div>
 
-					</div><!--end of demon-->
-				</div> <!-- end of left content -->
+						<div class="box_bottom"></div>
+					</div>
+
+				</div>
+				<!-- end of left content -->
 				<div class="right_content">
 
 					<!-- here we first show accont information-->
@@ -287,7 +210,7 @@
 														<td>" . $resultArray['fromto'] . "</td>
 														<td>" . $resultArray['publisher'] . "</td>
 														<td><a href=\"" .
-														$_SERVER['DOCUMENT_ROOT'] . '/flower_shop/cancelsubscriber.php?subscriber=' . $_SESSION['phone'] . "&publisher=" . $resultArray['publisher'] . "&day=" . $resultArray['day'] . "&fromto=" . $resultArray['fromto'].
+														'cancelsubscriber.php?subscriber=' . $_SESSION['phone'] . "&publisher=" . $resultArray['publisher'] . "&day=" . $resultArray['day'] . "&fromto=" . $resultArray['fromto'].
 														"\">Cancel</a></td>
 														</tr>";
 													echo $outPut;
@@ -392,19 +315,4 @@
 		</div>
 
 	</body>
-	
-	<script type="text/javascript">
-		var tabber1 = new Yetii({
-			id : 'demo',
-			active : '<?php if(isset($_GET['tab']))
-							{
-								echo $_GET['tab'];
-							}else{	
-								echo 1;
-							}
-							unset($_GET['tab']);
-					?>'
-		});
-
-	</script>
 </html>

@@ -287,7 +287,7 @@
 														<td>" . $resultArray['fromto'] . "</td>
 														<td>" . $resultArray['publisher'] . "</td>
 														<td><a href=\"" .
-														$_SERVER['DOCUMENT_ROOT'] . '/flower_shop/cancelsubscriber.php?subscriber=' . $_SESSION['phone'] . "&publisher=" . $resultArray['publisher'] . "&day=" . $resultArray['day'] . "&fromto=" . $resultArray['fromto'].
+														'cancelsubscriber.php?action=cancelSubscribe&id=' . $resultArray['id'].
 														"\">Cancel</a></td>
 														</tr>";
 													echo $outPut;
