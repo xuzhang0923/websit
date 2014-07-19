@@ -127,6 +127,27 @@
 			
 			return $retrieveResult;
 		}
+		
+		function retrievePublishedInformationByPublisher($publisher)
+		{
+			$mPublisher = mysql_real_escape_string($publisher);
+			
+			$retriveSql = "SELECT phone,day,time,fromto,totalseat,details FROM cars WHERE phone='" . $mPublisher . "'";
+			
+			$retrieveResult = mysql_query($retriveSql) or trigger_error("Query Failed:" . mysql_error());
+			
+			return $retrieveResult;
+		}
+		
+		function retrieveSubscribedInformationBySubscriber($subscriber)
+		{
+			$mSubscriber = mysql_real_escape_string($subscriber);
+			
+			$retriveSql = "SELECT publisher,day,fromto FROM subscribedInformation WHERE subscriber='" . $mSubscriber . "'";
+			$retrieveResult = mysql_query($retriveSql) or trigger_error("Query Failed:" . mysql_error());
+			
+			return $retrieveResult;
+		}
         
 		function subscribeCar($subscriberphone,$publishphone,$day,$fromto)
 		{	
@@ -160,15 +181,20 @@
 					$remainingSeat = $resultArray['totalseat'] -1;
 					$updateString = "UPDATE cars SET totalseat='". $remainingSeat ."' WHERE phone='" . $mPubPhone . "' and day='" . $mDay . "' and fromto='" . $fromto . "'";
 					$updateResult = mysql_query($updateString) or trigger_error("Query Failed:" . mysql_error()); 
-					
-					return true;
 				}
 			 }else
 			 {
-			 	$_SESSION['error'] = "can not get subscribed car information";		
+			 	$_SESSION['error'] = "can not get subscribed car information";
+			 	return false;	
 			 }
 			 
 			 $lock->unlock();
+			 
+			 //added to subscribed car information.
+			 $subscribedString = "INSERT INTO `subscribedInformation` (`subscriber`,`publisher`,`day`,`fromto`) VALUES ('" . $mSubPhone ."','" . $mPubPhone . "','". $mDay . "','" . $mFromto . "')";
+			 $insterSubscribedResult = mysql_query($subscribedString) or trigger_error("Insert Failed:" . mysql_error());
+			 
+			 return true;
 		}
         
         function __destruct(){

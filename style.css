@@ -160,7 +160,7 @@ padding:0px 15px 0 0 ;
 width:337px;
 clear:both;
 background:url(images/border.gif) no-repeat bottom center;
-padding:0 0 20px 0;
+padding:0 0 15px 30px;
 }
 img.right{
 float:right;
@@ -481,7 +481,7 @@ line-height:20px;
 }
 /*--------------cart_table-------------*/
 .cart_table{
-width:440px;
+width:325px;
 border:1px #CCCCCC solid;
 text-align:center;
 }

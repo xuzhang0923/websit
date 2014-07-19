@@ -103,11 +103,24 @@
                              			                            <div class="form_row">
                              			                            </div>
                              			                            
-                             			                            <div class="form_row">
-                             			                            </div>
-                             			                        
+                             	                            			<div class="form_row">
+                             	                            				<span id="autojump">this page will jump to main page after 5 seconds</span>
+                             	                            			</div>    
                              			                    </div>';
                              			echo $registeredText;
+										echo "<script language=\"javascript\"> 
+                             				var t = 5;
+                             				var time = document.getElementById(\"autojump\");
+                             				function fun(){
+                             	 				t--;
+                             	 				time.innerHTML=\"this page will jump to main page after \"+t+\" seconds\";
+                             	 				if(t<=0){
+                             	  					location.href = \"../index.php\";
+                             	  					clearInterval(inter);
+                             	 				}
+                             				}
+                             				var inter = setInterval(\"fun()\",1000);
+                             				</script>";
                              		}
                              		else {
                              			$registeredText = '<div class="contact_form">
