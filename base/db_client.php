@@ -148,6 +148,36 @@
 			
 			return $retrieveResult;
 		}
+		
+		function retreivePublishedInfromationBySubscribedCar($publisher, $day, $fromto)
+		{
+			$mPublisher = mysql_real_escape_string($publisher);
+			$mDay = mysql_real_escape_string($day);
+			$mFromTo = mysql_real_escape_string($fromto);
+			
+			$retriveSql = "SELECT subscriber,publisher,day,fromto FROM subscribedInformation WHERE publisher='" . $mPublisher . "' and day='" . $mDay . "' and fromto='" . $mFromTo . "'";
+			$retrieveResult = mysql_query($retriveSql) or trigger_error("Query Failed:" . mysql_error());
+			
+			return $retrieveResult; 
+		}
+		
+		function deletePublishCar($publisher, $day, $fromto)
+		{
+			$mPublisher = mysql_real_escape_string($publisher);
+			$mDay = mysql_real_escape_string($day);
+			$mFromTo = mysql_real_escape_string($fromto);
+			
+			$lock = new File_Lock($_SERVER['DOCUMENT_ROOT'] . '/flower_shop/base/' . 'addlock.lock');
+			$lock->writeLock();
+				$deleteString = "DELETE FROM cars WHERE phone='" . $mPublisher . "' and day='" . $mDay . "' and fromto='" . $mFromTo . "'";
+				$deleteQuery = mysql_query($deleteString) or trigger_error("Deleted Failed" . mysql_error());
+				
+				$deleteString = "DELETE FROM subscribedInformation WHERE publisher='" . $mPublisher . "' and day='" . $mDay . "' and fromto='" . $mFromTo . "'";
+				$deleteQuery = mysql_query($deleteString) or trigger_error("Deleted Failed" . mysql_error());
+			$lock->unlock();
+			
+			return true;
+		}
         
 		function subscribeCar($subscriberphone,$publishphone,$day,$fromto)
 		{	
@@ -188,11 +218,11 @@
 			 	return false;	
 			 }
 			 
-			 $lock->unlock();
-			 
 			 //added to subscribed car information.
 			 $subscribedString = "INSERT INTO `subscribedInformation` (`subscriber`,`publisher`,`day`,`fromto`) VALUES ('" . $mSubPhone ."','" . $mPubPhone . "','". $mDay . "','" . $mFromto . "')";
 			 $insterSubscribedResult = mysql_query($subscribedString) or trigger_error("Insert Failed:" . mysql_error());
+			 $lock->unlock(); 
+			 
 			 
 			 return true;
 		}
