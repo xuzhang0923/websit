@@ -287,7 +287,7 @@
 														<td>" . $resultArray['fromto'] . "</td>
 														<td>" . $resultArray['publisher'] . "</td>
 														<td><a href=\"" .
-														'cancelsubscriber.php?action=cancelSubscribe&id=' . $resultArray['id'].
+														'cancelsubscriber.php?action=cancelSubscribe&id=' . $resultArray['id']. "&day=" . $resultArray['day'] . "&fromto=" . $resultArray['fromto'] . "&publisher=" . $resultArray['publisher'] . 
 														"\">Cancel</a></td>
 														</tr>";
 													echo $outPut;
@@ -319,9 +319,8 @@
 						?>
 
 						<form name="register" method="post" action="?action=publishInformation">
-							<div class="form_row">
+							
 								<label class="contact"><strong>Day:</strong></label>
-								<br/>
 								<select name="day">
 									<option value= "0"> <?php echo date("Y-m-d") . date("N") ?> </option>
 									<option value= "1"> <?php echo date("Y-m-d",strtotime("+1 day")) . date("N",strtotime("+1 day")) ?> </option>
@@ -331,12 +330,9 @@
 									<option value= "5"> <?php echo date("Y-m-d",strtotime("+5 day")) . date("N",strtotime("+5 day")) ?> </option>
 									<option value= "6"> <?php echo date("Y-m-d",strtotime("+6 day")) . date("N",strtotime("+6 day")) ?> </option>
 								</select>
-							</div>
-							
-							<div class="form_row">
-								<label class="contact"><strong>Time:</strong></label>
 								<br/>
-								<select name="time">
+								<label class="contact"><strong>Time:</strong></label>
+								<select name="time" class="timeselect">
 									<option value= "1"> 5:00 - 6:00 </option>
 									<option value= "2"> 6:00 - 7:00 </option>
 									<option value= "3"> 7:00 - 8:00 </option>
@@ -345,34 +341,25 @@
 									<option value= "6"> 17:00 - 18:00 </option>
 									<option value= "7"> 18:00 - 19:00 </option>
 								</select>
-							</div>
-							
-							<div class="form_row">
+								<br/>					
 								<label class="contact"><strong>From To</strong></label>
-								<br/>
-								<select name="fromto">
+								<select name="fromto" class="fromtoselect">
 									<option value= "1"> Beijing - Yixian </option>
 									<option value= "2"> Yixian - Beijing </option>
 								</select>
-							</div>
-							
-							<div class="form_row" >
+								<br/>							
 								<label class="contact"><strong>total seat</strong></label>
-								<br/>
-								<input type="text" class="contact_input" name="seatnumber" />
-							</div>
-							
-							<div class="form_row">
+								<textarea rows="1" name="seatnumber" cols="30" placeholder="type how many seat for your car"></textarea>
+                                    
+								<br/>							
 								<label class="contact"><strong>Detials</strong></label>
-								<br/>
-								<input type="text" class="contact_input" name="details" />
-							</div>
+								<textarea rows="3" name="details" cols="30" placeholder="Type message here"></textarea>
 							
 							<div class="form_row">
-								<label class="contact"><strong>Submit</strong></label>
-								<br/>
 								<input type="submit" class="register" value="publish" />
 							</div>
+							
+							<div class="clear"></div>
 						</form>
 					</div>
 					<?php

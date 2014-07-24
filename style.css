@@ -556,6 +556,15 @@ padding:0 5px 0 5px;
 color:#afaeaf;
 }
 /*---------------Select------------------------*/
+select{
+width: 120px;
+}
 
-
-
+.timeselect{
+	width: 120px;
+	display: inline;
+}
+.fromtoselect{
+	width: 120px;
+	display: inline;
+}

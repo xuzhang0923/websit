@@ -31,9 +31,9 @@
 						
 						if($dbClient->loggedIn())
 						{
-							if(isset($_GET['id']))
+							if(isset($_GET['id']) && isset($_GET['day']) && isset($_GET['fromto']) && isset($_GET['publisher']))
 							{
-								if(!$dbClient->cancelSubscriber($_GET['id']))
+								if(!$dbClient->cancelSubscriber($_GET['id'],$_GET['publisher'],$_GET['day'],$_GET['fromto']))
 								{
 									$_SESSION['message'] = $_SESSION['error'];
 								}else{
@@ -57,6 +57,7 @@
 			}else{
 				$_SESSION['message'] = "Invalid Request";
 			}
+
 			?>
 
 			<div class="center_content">
@@ -77,7 +78,7 @@
 								<?php echo $_SESSION['message']; ?>
 							</p>
 							<p class="details">
-                             	  <span id="autojump">this page will jump to main page after 5 seconds</span>
+                             	  <span id="autojump">this page will jump to main page after 3 seconds</span>
                              </p>	           
                                      	
                              <script language="javascript"> 

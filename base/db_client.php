@@ -227,16 +227,49 @@
 			 return true;
 		}
 
-		function cancelSubscriber($id)
+		function cancelSubscriber($id,$publisher,$day,$fromto)
 		{
 			$mId = mysql_real_escape_string($id);
 			
+			//delete from details database.
 			$deleteString = "DELETE FROM `subscribedInformation` WHERE id=\"" . $mId . "\"";
 			
 			if(!mysql_query($deleteString))
 			{
 				$_SESSION['error'] = mysql_error();
+				return false;
 			}
+			
+			//increase the car seat number
+			$mPubPhone = mysql_real_escape_string($publisher);
+			$mDay = mysql_real_escape_string($day);	
+			$mFromto = mysql_real_escape_string($fromto);
+			
+			 $lock = new File_Lock($_SERVER['DOCUMENT_ROOT'] . '/flower_shop/base/' . 'addlock.lock');
+			 $lock->writeLock();
+			 
+			 $retreiveString = "SELECT phone,day,fromto,totalseat FROM cars WHERE day='" . $mDay . "' and fromto='" . $mFromto . "' and phone='" . $mPubPhone . "'";
+			 $retrieverResult = mysql_query($retreiveString) or trigger_error("Query Failed:" . mysql_error());
+			 
+			 if(mysql_num_rows($retrieverResult) != 1)
+			 {
+			 	$_SESSION['error'] = "no subscribe car information";
+			 	return false;
+			 }
+			 
+			 if($retrieverResult)
+			 {
+			 	$resultArray = mysql_fetch_array($retrieverResult);
+
+				$remainingSeat = $resultArray['totalseat'] + 1;
+				$updateString = "UPDATE cars SET totalseat='". $remainingSeat ."' WHERE phone='" . $mPubPhone . "' and day='" . $mDay . "' and fromto='" . $fromto . "'";
+				$updateResult = mysql_query($updateString) or trigger_error("Query Failed:" . mysql_error()); 
+			 }else
+			 {
+			 	$_SESSION['error'] = "can not get subscribed car information";
+			 	return false;	
+			 }
+			 $lock->unlock(); 
 			
 			return true;
 		}
