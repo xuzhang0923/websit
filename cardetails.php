@@ -25,20 +25,32 @@
 			?>
 			
 			<?php
+			
+			$_SESSION['message']="";
 			if (isset($_GET['action'])) {
 				switch ($_GET['action']) {
 					case 'cardetails' :
 						
 						if($dbClient->loggedIn())
 						{
-							if(isset($_GET['id']))
+							if(isset($_GET['day']) && isset($_GET['fromto']) && isset($_SESSION['phone']))
 							{
-								if(!$dbClient->cancelSubscriber($_GET['id']))
+								//constuct output string
+								$outputString = "";
+								$result = $dbClient->retreivePublishedInfromationBySubscribedCar($_SESSION['phone'], $_GET['day'], $_GET['fromto']);
+								
+								if(mysql_num_rows($result) > 0)
 								{
-									$_SESSION['message'] = $_SESSION['error'];
-								}else{
-									$_SESSION['message'] = "You have successfully unsubscribe from this car";
+									$fecthedArray = mysql_fetch_array($result);
+									while($fecthedArray)
+									{
+										echo $fecthedArray['subscriber'];
+										$fecthedArray = mysql_fetch_array($result);
+									}
 								}
+								
+							}else{
+								$_SESSION['message'] = "parameter is not enought";
 							}
 							
 						}else
@@ -46,8 +58,6 @@
 							$_SESSION['message'] = "You are login yet. Please log in and then perform the action";								
 						}
 						
-						unset($_GET['id']);
-
 						break;
 
 					default :
@@ -76,6 +86,11 @@
 							<p class="details">
 								<?php echo $_SESSION['message']; ?>
 							</p>
+							
+							<p>
+								<?php echo $outPutString; ?>
+							</p>
+							
 							<p class="details">
                              	  <span id="autojump">this page will jump to main page after 5 seconds</span>
                              </p>	           
