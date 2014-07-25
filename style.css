@@ -485,6 +485,12 @@ width:325px;
 border:1px #CCCCCC solid;
 text-align:center;
 }
+
+.left_cart_table{
+width:325px;
+text-align:center;
+padding:5px 0px 0px 30px;
+}
 tr.cart_title{
 background-color:#DFDFDF;
 }
@@ -567,4 +573,15 @@ width: 120px;
 .fromtoselect{
 	width: 120px;
 	display: inline;
+}
+
+/*---------------text area------------------------*/
+.left_text_area
+{
+	float:left;
+	padding:5px 0px 0px 40px;
+}
+.left_text_area2
+{
+	border:1px dashed #a81f22;
 }

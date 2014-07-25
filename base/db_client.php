@@ -106,8 +106,9 @@
 			
 			if(mysql_num_rows($publishedInforQuery) > 0)
 			{
-				return false;
+				
 				$_SESSION['error'] = "there is such information has been published, please remove it first.";
+				return false;
 			}
 			else {
 				$insertSql = "INSERT INTO `cars` (`phone`,`day`,`time`,`fromto`,`totalseat`,`details`) VALUES ('" . $mPhone ."','" . $mDay . "','". $mTime . "','" . $mFromTo . "','" . $mTotalSeat . "','" . $mDetails . "')"; 

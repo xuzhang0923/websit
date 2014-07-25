@@ -97,13 +97,15 @@
 																		$outputString .= $fetchedArray['phone'];
 													$outputString .="</div>";
 										
-													$outputString .= "<ul class=\"list\">";			
-															$outputString .="<li> day      : " . $fetchedArray['day'] . "</li>";
-															$outputString .="<li> time     : " . $fetchedArray['time'] . "</li>";
-															$outputString .="<li> fromto   : " . $fetchedArray['fromto'] . "</li>";
-															$outputString .="<li> totalseat: " . $fetchedArray['totalseat'] . "</li>";
-															$outputString .="<li> details  : " . $fetchedArray['details'] . "</li>";
-													$outputString .="</ul>";
+													$outputString .= "<table class=\"left_cart_table\">";	
+														    //$outputString .= "<tr class=\"cart_title\"><td>day</td><td>time</td><td>FromTo</td><td>LeftSeat</td></tr>";
+															$outputString .= "<tr><td>day:" . $fetchedArray['day'] . "</td>
+																				 <td>time:" . $fetchedArray['time'] . "</td>
+																				 <td>fromto:" . $fetchedArray['fromto'] . "</td>
+																				 <td>leftseat:" . $fetchedArray['totalseat'] . "</td>
+																		      </tr>";			
+													$outputString .="</table>";
+													$outputString .="<div class=\"left_text_area\"><textarea class=\"left_text_area2\" rows=\"3\" name=\"details\" cols=\"45\" disabled=\"disabled\">" . $fetchedArray['details'] . "</textarea></div>";
 													
 													$outputString .= "<form method=\"post\" action=\"?action=add&tab=1\">" . 
 															"<input type=\"hidden\" name=\"phone\" value=\"" . $fetchedArray['phone'] . "\"/>" .
