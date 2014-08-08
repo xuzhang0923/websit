@@ -19,14 +19,12 @@
         require_once $_SERVER['DOCUMENT_ROOT'] . '/flower_shop/elements/menu.php';
         require_once $_SERVER['DOCUMENT_ROOT'] . '/flower_shop/base/config.php';
         require_once $_SERVER['DOCUMENT_ROOT'] . '/flower_shop/base/db_client.php';
-		require_once $_SERVER['DOCUMENT_ROOT'] . '/flower_shop/base/tools.php';
         
         $dbClient = new DB_Client();
-		$tools = new Tools();
     ?>
     
 	<script type="text/javascript">
-		var liElement = document.getElementsByName('menu1');
+		var liElement = document.getElementsByName('menu3');
 		if(liElement.length > 0)
 		{
 			liElement[0].className='selected';
@@ -89,14 +87,49 @@
 								<a class="" href="#tab2">Yixian => Beijing</a>
 							</li>
 						</ul>
-						
 						<div class="tabs-container">
 							<div style="display: block;" class="tab" id="tab1">
 								<div class="feat_prod_box"></div>
 								<?php  									
 										$publishedInformaiton = $dbClient->retrieverInformation(date("Y-m-d"), 1);
-
-										$tools->printCarInformation($publishedInformaiton);
+										$fetchedArray = mysql_fetch_array($publishedInformaiton);
+										while($fetchedArray)
+										{
+											echo "<div class=feat_prod_box> <div class=prod_det_box>"	;
+											$outputString = "<div class=\"box_top\"></div>
+																	<div class=\"box_center\">
+																		<div class=\"prod_title\">";
+																			$outputString .= $fetchedArray['phone'];
+														$outputString .="</div>";
+											
+														$outputString .= "<table class=\"left_cart_table\">";	
+															    //$outputString .= "<tr class=\"cart_title\"><td>day</td><td>time</td><td>FromTo</td><td>LeftSeat</td></tr>";
+																$outputString .= "<tr><td>day:   " . $fetchedArray['day'] . "</td>
+																					 <td>time:   " . $fetchedArray['time'] . "</td>
+																					 <td>fromto:    " . $fetchedArray['fromto'] . "</td>
+																					 <td>leftseat:   " . $fetchedArray['totalseat'] . "</td>
+																			      </tr>";			
+														$outputString .="</table>";
+														$outputString .="<div class=\"left_text_area\"><textarea class=\"left_text_area2\" rows=\"2\" name=\"details\" cols=\"45\" disabled=\"disabled\">" . $fetchedArray['details'] . "</textarea></div>";
+														
+														$outputString .= "<form method=\"post\" action=\"?action=add&tab=1\">" . 
+																"<input type=\"hidden\" name=\"phone\" value=\"" . $fetchedArray['phone'] . "\"/>" .
+																"<input type=\"hidden\" name=\"day\" value=\"" . $fetchedArray['day'] . "\"/>" .
+																"<input type=\"hidden\" name=\"fromto\" value=\"" . $fetchedArray['fromto'] . "\"/>" .
+				                           						 "<div class=\"form_row\">" .
+				                           						 	"<input type=\"submit\" class=\"register\" value=\"register\"/>".
+				                            						 "</div>".
+			                            						"</form>";
+														$outputString .="<div class=\"clear\"></div>
+																	</div>
+																	<div class=\"box_bottom\"></div>
+																</div>
+																<div class=\"clear\"></div>
+															</div>";	
+											echo $outputString;
+											
+											$fetchedArray = mysql_fetch_array($publishedInformaiton);
+										}
 									
 									?>
 							</div><!-- end of table 1 -->
@@ -105,8 +138,46 @@
 								<div class="feat_prod_box"></div>
 								<?php
 									$publishedInformaiton = $dbClient->retrieverInformation(date("Y-m-d"), 2);
-							
-									$tools->printCarInformation($publishedInformaiton);
+									
+									$fetchedArray = mysql_fetch_array($publishedInformaiton);
+									while($fetchedArray)
+									{
+										$outputString = "<div class=\"feat_prod_box\">
+															<div class=\"prod_det_box\">
+																<div class=\"box_top\"></div>
+																<div class=\"box_center\">
+																	<div class=\"prod_title\">";
+																		$outputString .= $fetchedArray['phone'];
+													$outputString .="</div>";
+										
+													$outputString .= "<ul class=\"list\">";			
+															$outputString .="<li> day      : " . $fetchedArray['day'] . "</li>";
+															$outputString .="<li> time     : " . $fetchedArray['time'] . "</li>";
+															$outputString .="<li> fromto   : " . $fetchedArray['fromto'] . "</li>";
+															$outputString .="<li> totalseat: " . $fetchedArray['totalseat'] . "</li>";
+															$outputString .="<li> details  : " . $fetchedArray['details'] . "</li>";
+													$outputString .="</ul>";
+													
+										$outputString .= "<form method=\"post\" action=\"?action=add&tab=2\">" . 
+															"<input type=\"hidden\" name=\"phone\" value=\"" . $fetchedArray['phone'] . "\"/>" .
+															"<input type=\"hidden\" name=\"day\" value=\"" . $fetchedArray['day'] . "\"/>" .
+															"<input type=\"hidden\" name=\"fromto\" value=\"" . $fetchedArray['fromto'] . "\"/>" .
+			                           						 "<div class=\"form_row\">" .
+			                           						 	"<input type=\"submit\" class=\"register\" />".
+			                            						 "</div>".
+		                            						"</form>";
+													
+													$outputString .="<div class=\"clear\"></div>
+																</div>
+																<div class=\"box_bottom\"></div>
+															</div>
+															<div class=\"clear\"></div>
+														</div>";
+														
+										echo $outputString;
+										
+										$fetchedArray = mysql_fetch_array($publishedInformaiton);
+									}
 								?>
 							</div><!-- end of table 2 -->
 						</div><!--end of table container-->

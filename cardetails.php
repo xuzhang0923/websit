@@ -27,6 +27,7 @@
 			<?php
 			
 			$_SESSION['message']="";
+			$outputString="";
 			if (isset($_GET['action'])) {
 				switch ($_GET['action']) {
 					case 'cardetails' :
@@ -35,16 +36,15 @@
 						{
 							if(isset($_GET['day']) && isset($_GET['fromto']) && isset($_SESSION['phone']))
 							{
+								$outputString = "<div class=prod_title><p class=left_text_area3>" . $_SESSION['phone'] . "----" . $_GET['day'] . "----" . $_GET['fromto'] . "</p></div>";
 								//constuct output string
-								$outputString = "";
 								$result = $dbClient->retreivePublishedInfromationBySubscribedCar($_SESSION['phone'], $_GET['day'], $_GET['fromto']);
-								
 								if(mysql_num_rows($result) > 0)
 								{
 									$fecthedArray = mysql_fetch_array($result);
 									while($fecthedArray)
 									{
-										echo $fecthedArray['subscriber'];
+										$outputString .= "<div class=clear><p class=left_text_area> customer : " . $fecthedArray['subscriber'] . "</p></div>";
 										$fecthedArray = mysql_fetch_array($result);
 									}
 								}
@@ -57,6 +57,27 @@
 						{
 							$_SESSION['message'] = "You are login yet. Please log in and then perform the action";								
 						}
+						
+						 break;
+// 						
+					 case 'removePublishedCar' :
+						
+						if($dbClient->loggedIn())
+						{
+							if(isset($_POST['day']) && isset($_POST['fromto']) && isset($_SESSION['phone']))
+							{
+								//constuct output string
+								$result = $dbClient->deletePublishCar($_SESSION['phone'], $_POST['day'], $_POST['fromto']);
+								$_SESSION['message']= "<p class=left_text_area>You have successfully removed this triavel</p>";								
+							}else{
+								$_SESSION['message'] = "parameter is not enought";
+							}
+							
+							unset($_POST);
+						}else
+							{
+								$_SESSION['message'] = "You are not login yet. Please log in and then perform the action";
+							}
 						
 						break;
 
@@ -74,40 +95,32 @@
 				<div class="left_content">
 
 					<div class="title">
-						<span class="title_icon"><img src="images/bullet1.gif" alt="" title="" /></span>Traivel  Inforation
+						<span class="title_icon"><img src="images/bullet1.gif" alt="" title="" /></span>Details of this travel
 					</div>
 
 					<div class="prod_det_box">
 						<div class="box_top"></div>
 						<div class="box_center">
-							<div class="prod_title">
-								Cancel Result
-							</div>
-							<p class="details">
-								<?php echo $_SESSION['message']; ?>
-							</p>
-							
-							<p>
-								<?php echo $outPutString; ?>
-							</p>
-							
-							<p class="details">
-                             	  <span id="autojump">this page will jump to main page after 5 seconds</span>
-                             </p>	           
-                                     	
-                             <script language="javascript"> 
-                             		var t = 3;
-                             		var time = document.getElementById("autojump");
-                             		function fun(){
-                             	 		t--;
-                             	 		time.innerHTML="this page will jump to main page after "+t+" seconds";
-                             	 		if(t<=0){
-                             	  			location.href = "index.php";
-                             	  			clearInterval(inter);
-                             	 		}
-                             		}
-                             		var inter = setInterval("fun()",1000);
-                             </script>
+							<?php
+								if($outputString == "")
+								{
+									echo $_SESSION['message'];
+								}else{
+									echo $outputString;
+								
+								
+									$outputString = "<form method=\"post\" action=\"?action=removePublishedCar\">" . 
+															"<input type=\"hidden\" name=\"phone\" value=\"" . $_SESSION['phone'] . "\"/>" .
+															"<input type=\"hidden\" name=\"day\" value=\"" . $_GET['day'] . "\"/>" .
+															"<input type=\"hidden\" name=\"fromto\" value=\"" . $_GET['fromto'] . "\"/>" .
+			                           						 "<div class=\"form_row\">" .
+			                           						 	"<input type=\"submit\" class=\"register\" value=\"delete\"/>".
+			                            						 "</div>".
+		                            						"</form>";
+									unset($_GET);
+									echo $outputString;
+								}
+							?>
 							<div class="clear"></div>
 						</div>
 
