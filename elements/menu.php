@@ -1,5 +1,8 @@
  <?php
- 	require_once $_SERVER['DOCUMENT_ROOT'] . '/flower_shop/base/config.php';
+        require_once 'elements/menu.php';
+        require_once 'base/config.php';
+        require_once 'base/db_client.php';
+        	require_once 'base/tools.php';
  ?>
           	<div class="header">
                 <div class="logo"><a href="index.html"><img src="/flower_shop/images/logo.gif" alt="" title="" border="0" /></a></div>

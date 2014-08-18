@@ -9,7 +9,7 @@
         }
         
         public function connect(){
-            require_once $_SERVER['DOCUMENT_ROOT'] . '/flower_shop/base/config.php';
+            require_once 'base/config.php';
             $con = mysql_connect(DB_HOST, DB_USER, DB_PASSWORD);
             mysql_select_db(DB_DATABASE);
             

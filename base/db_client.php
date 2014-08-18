@@ -3,9 +3,9 @@
         private $db;
         
         function __construct(){
-            require_once $_SERVER['DOCUMENT_ROOT'] . '/flower_shop/base/db_connect.php';
-			require_once $_SERVER['DOCUMENT_ROOT'] . '/flower_shop/base/FileLock.php';
-			require_once $_SERVER['DOCUMENT_ROOT'] . '/flower_shop/base/tools.php';
+            require_once 'base/db_connect.php';
+			require_once 'base/FileLock.php';
+			require_once 'base/tools.php';
 
             $this->db = new DB_Connect();
             $this->db->connect();

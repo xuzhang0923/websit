@@ -16,10 +16,11 @@
 <div id="wrap">
 
 	<?php
-        require_once $_SERVER['DOCUMENT_ROOT'] . '/flower_shop/elements/menu.php';
-        require_once $_SERVER['DOCUMENT_ROOT'] . '/flower_shop/base/config.php';
-        require_once $_SERVER['DOCUMENT_ROOT'] . '/flower_shop/base/db_client.php';
-        	require_once $_SERVER['DOCUMENT_ROOT'] . '/flower_shop/base/tools.php';
+    		require_once 'global.php';
+        require_once 'elements/menu.php';
+        require_once 'base/config.php';
+        require_once 'base/db_client.php';
+        	require_once 'base/tools.php';
         
         $dbClient = new DB_Client();
 		$tools = new Tools();
